@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -74,6 +75,11 @@ namespace Samples.ViewModel
                 var request = new GeolocationRequest((GeolocationAccuracy)Accuracy);
                 cts = new CancellationTokenSource();
                 var location = await Geolocation.GetLocationAsync(request, cts.Token);
+                CurrentLocation = FormatLocation(location);
+                await Task.Run(async () =>
+                {
+                    location = await Geolocation.GetLocationAsync(request, cts.Token);
+                });
                 CurrentLocation = FormatLocation(location);
             }
             catch (Exception ex)
